@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+import os
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
@@ -25,9 +27,12 @@ router.register(r'activities', views.ActivityViewSet)
 router.register(r'leaderboard', views.LeaderboardViewSet)
 router.register(r'workouts', views.WorkoutViewSet)
 
+# Use CODESPACE_NAME for codespace-specific endpoint documentation (not for routing)
+CODESPACE_NAME = os.environ.get('CODESPACE_NAME', '')
+codespace_url = f"https://{CODESPACE_NAME}-8000.app.github.dev" if CODESPACE_NAME else "http://localhost:8000"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.api_root, name='api_root'),  # root URL points to API root
     path('api/', views.api_root, name='api_root'),
     path('api/', include(router.urls)),
 ]
